@@ -40,47 +40,24 @@ CREATE TABLE `movie_torrents`(
 
 CREATE TABLE `movie_genres`(
     `id` INT AUTO_INCREMENT,
-    `type` ENUM('action', 'comedy', 'horror', 'animation', 'drama', 'mystrey', 'crime', 'fantasy', 'adventure', 'superhero', 'sci-fi', 'thriller', 'romance', 'family', 'western', 'history', 'musical', 'biography', 'war', 'documentary', 'sport') NOT NULL,
+    `type` ENUM('action', 'comedy', 'horror', 'animation', 'drama', 'mystery', 'crime', 'fantasy', 'adventure', 'superhero', 'sci-fi', 'thriller', 'romance', 'family', 'western', 'history', 'musical', 'biography', 'war', 'documentary', 'sport', 'film-noir', 'news', 'game-show', 'music', 'reality-tv', 'talk-show') NOT NULL,
      primary key (`id`)
 );
 
 CREATE TABLE `artists`(
     `id` INT AUTO_INCREMENT,
     `full_name` VARCHAR(255) NOT NULL,
-    `image_url` VARCHAR(255) NOT NULL,
+    `image_url` VARCHAR(255),
     `imdb_code` CHAR(7) UNIQUE NOT NULL,
      primary key (`id`)
 );
-INSERT INTO yts_db.movie_genres (`type`) VALUES
-	 ('action'),
-	 ('comedy'),
-	 ('horror'),
-	 ('animation'),
-	 ('drama'),
-	 ('mystery'),
-	 ('crime'),
-	 ('fantasy'),
-	 ('adventure'),
-	 ('superhero');
-INSERT INTO yts_db.movie_genres (`type`) VALUES
-	 ('sci-fi'),
-	 ('thriller'),
-	 ('romance'),
-     ('family'),
-     ('western'),
-     ('history'),
-     ('musical'),
-     ('biography'),
-     ('war'),
-     ('documentary'),
-     ('sport');
 
 
 CREATE TABLE `movie_cast_mapping`(
     `id` INT AUTO_INCREMENT,
     `movie_id` INT NOT NULL,
     `artist_id` INT NOT NULL,
-    `imdb_code` CHAR(7) NOT NULL,
+    `character_name` VARCHAR(255) NOT NULL,
      primary key (`id`)
 );
 
@@ -98,3 +75,32 @@ CREATE TABLE `movie_images`(
     `image_quality` ENUM('medium', 'large') NOT NULL,
      primary key(`id`)
 );
+
+
+INSERT INTO yts_db.movie_genres (`type`) VALUES
+	 ('action'),
+	 ('comedy'),
+	 ('horror'),
+	 ('animation'),
+	 ('drama'),
+	 ('mystery'),
+	 ('crime'),
+	 ('fantasy'),
+	 ('adventure'),
+	 ('superhero');
+
+INSERT INTO yts_db.movie_genres (`type`) VALUES
+	 ('sci-fi'),
+	 ('thriller'),
+	 ('romance'),
+     ('family'),
+     ('western'),
+     ('history'),
+     ('musical'),
+     ('biography'),
+     ('war'),
+     ('documentary'),
+     ('sport'),
+     ('film-noir'),
+     ('news'), 
+     ('game-show'), ('music'), ('reality-tv'), ('talk-show');

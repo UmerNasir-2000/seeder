@@ -1,8 +1,6 @@
 import mysql from "mysql2/promise";
 import axios from "axios";
 
-
-
 async function bulkInsertMovies() {
 
   const connection = await mysql.createConnection({
@@ -12,7 +10,7 @@ async function bulkInsertMovies() {
     password: "dawaai_db",
   });
 
-  let artists = {};
+  let artistsObj = {};
 
   let genres = {
     'action': 1,
@@ -36,9 +34,15 @@ async function bulkInsertMovies() {
     'war': 19,
     'documentary': 20,
     'sport': 21,
+    'film-noir': 22,
+    'news': 23,
+    'game-show': 24,
+    'music': 25,
+    'reality-tv': 26,
+    'talk-show': 27,
   }
 
-  for (let i = 1; i <= 1000; i++) {
+  for (let i = 55; i <= 1000; i++) {
     const { data } = await axios.get(
       `https://yts.mx/api/v2/movie_details.json?movie_id=${i}&with_cast=true&with_images=true`
     );
@@ -78,14 +82,40 @@ async function bulkInsertMovies() {
         `INSERT INTO movie_images(movie_id, image, image_quality) VALUES(${rows.insertId},"${data.data.movie.large_screenshot_image3}","large")`
       );
 
-      for (const torrent of data.data.movie.torrents) {
-        const moviesTorrent = await connection.execute(`INSERT INTO movie_torrents(movie_id, hash, quality, type, seeds, peers, size_bytes) VALUES(${rows.insertId},"${torrent.hash}","${torrent.quality}","${torrent.type}",${torrent.seeds}, ${torrent.peers}, ${torrent.size_bytes})`)
+      if (data.data.movie.torrents !== undefined) {
+        for (const torrent of data.data.movie.torrents) {
+          const moviesTorrent = await connection.execute(`INSERT INTO movie_torrents(movie_id, hash, quality, type, seeds, peers, size_bytes) VALUES(${rows.insertId},"${torrent.hash}","${torrent.quality}","${torrent.type}",${torrent.seeds}, ${torrent.peers}, ${torrent.size_bytes})`)
+        }
       }
 
-      for (const genre of data.data.movie.genres) {
-        console.log(genre.toLowerCase())
-        console.log(genres[genre.toLowerCase()])
-        const movieGenres = await connection.execute(`INSERT INTO movie_genre_mapping(movie_id, genre_id) VALUES(${rows.insertId}, ${genres[genre.toLowerCase()]})`)
+
+      if (data.data.movie.genres !== undefined) {
+
+        for (const genre of data.data.movie.genres) {
+          await connection.execute(`INSERT INTO movie_genre_mapping(movie_id, genre_id) VALUES(${rows.insertId}, ${genres[genre.toLowerCase()]})`)
+        }
+
+      }
+
+
+
+      if (data.data.movie.cast !== undefined) {
+
+        for (const artist of data?.data?.movie?.cast) {
+
+          if (!artistsObj[artist.imdb_code]) {
+
+            let imageURL = artist.url_small_image ? artist.url_small_image : null;
+
+            const [result, field] = await connection.execute(`INSERT INTO artists(full_name, image_url, imdb_code) VALUES("${artist.name}", "${imageURL}", "${artist.imdb_code}")`)
+            if (result.insertId !== 0) artistsObj[artist.imdb_code] = result.insertId;
+
+          }
+
+          await connection.execute(`INSERT INTO movie_cast_mapping(movie_id, artist_id, character_name) VALUES(${rows.insertId}, ${artistsObj[artist.imdb_code]}, "${artist.name}")`);
+
+        }
+
       }
 
       console.log(`Movie inserted with id = ${rows.insertId}`)
