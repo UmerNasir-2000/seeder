@@ -51,6 +51,22 @@ CREATE TABLE `artists`(
     `imdb_code` CHAR(7) UNIQUE NOT NULL,
      primary key (`id`)
 );
+INSERT INTO yts_db.movie_genres (`type`) VALUES
+	 ('action'),
+	 ('comedy'),
+	 ('horror'),
+	 ('animation'),
+	 ('drama'),
+	 ('mystrey'),
+	 ('crime'),
+	 ('fantasy'),
+	 ('adventure'),
+	 ('superhero');
+INSERT INTO yts_db.movie_genres (`type`) VALUES
+	 ('sci-fi'),
+	 ('thriller'),
+	 ('romance');
+
 
 CREATE TABLE `movie_cast_mapping`(
     `id` INT AUTO_INCREMENT,

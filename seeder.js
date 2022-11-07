@@ -14,6 +14,22 @@ async function bulkInsertMovies() {
 
   let artists = {};
 
+  let genres = {
+    'action': 1,
+    'comedy': 2,
+    'horror': 3,
+    'animation': 4,
+    'drama': 5,
+    'mystrey': 6,
+    'crime': 7,
+    'fantasy': 8,
+    'adventure': 9,
+    'superhero': 10,
+    'sci-fi': 11,
+    'thriller': 12,
+    'romance': 13,
+  }
+
   for (let i = 300; i <= 320; i++) {
     const { data } = await axios.get(
       `https://yts.mx/api/v2/movie_details.json?movie_id=${i}&with_cast=true&with_images=true`
