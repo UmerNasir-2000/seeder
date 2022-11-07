@@ -14,7 +14,7 @@ CREATE TABLE `movies`(
      primary key (`id`)
 );
 
-CREATE TABLE `movie_images`(
+CREATE TABLE `movie_posters`(
     `id` INT AUTO_INCREMENT,
     `movie_id` INT NOT NULL,
     `background` VARCHAR(255) NOT NULL,
@@ -44,9 +44,33 @@ CREATE TABLE `movie_genres`(
      primary key (`id`)
 );
 
+CREATE TABLE `artists`(
+    `id` INT AUTO_INCREMENT,
+    `full_name` VARCHAR(255) NOT NULL,
+    `image_url` VARCHAR(255) NOT NULL,
+    `imdb_code` CHAR(7) UNIQUE NOT NULL,
+     primary key (`id`)
+);
+
+CREATE TABLE `movie_cast_mapping`(
+    `id` INT AUTO_INCREMENT,
+    `movie_id` INT NOT NULL,
+    `artist_id` INT NOT NULL,
+    `imdb_code` CHAR(7) NOT NULL,
+     primary key (`id`)
+);
+
 CREATE TABLE `movie_genre_mapping`(
     `id` INT AUTO_INCREMENT,
     `movie_id` INT NOT NULL,
     `genre_id` INT NOT NULL,
      primary key (`id`)
+);
+
+CREATE TABLE `movie_images`(
+    `id` INT AUTO_INCREMENT,
+    `movie_id` INT NOT NULL,
+    `image` TEXT NOT NULL,
+    `image_quality` ENUM('medium', 'large') NOT NULL,
+     primary key(`id`)
 );
