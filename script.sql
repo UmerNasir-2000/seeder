@@ -33,7 +33,7 @@ CREATE TABLE `movie_torrents`(
     `type` VARCHAR(20) NOT NULL,
     `seeds` INT NOT NULL,
     `peers` INT NOT NULL,
-    `size_bytes` INT NOT NULL,
+    `size_bytes` BIGINT NOT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
      primary key (`id`)
 );
