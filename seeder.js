@@ -42,7 +42,7 @@ async function bulkInsertMovies() {
     'talk-show': 27,
   }
 
-  for (let i = 55; i <= 1000; i++) {
+  for (let i = 1; i <= 200; i++) {
     const { data } = await axios.get(
       `https://yts.mx/api/v2/movie_details.json?movie_id=${i}&with_cast=true&with_images=true`
     );
@@ -107,12 +107,26 @@ async function bulkInsertMovies() {
 
             let imageURL = artist.url_small_image ? artist.url_small_image : null;
 
-            const [result, field] = await connection.execute(`INSERT INTO artists(full_name, image_url, imdb_code) VALUES("${artist.name}", "${imageURL}", "${artist.imdb_code}")`)
-            if (result.insertId !== 0) artistsObj[artist.imdb_code] = result.insertId;
+            if (imageURL == null) {
+
+              const [result, field] = await connection.execute(`INSERT INTO artists(full_name, imdb_code) VALUES("${artist.name}", "${artist.imdb_code}")`)
+
+              if (result.insertId !== 0) artistsObj[artist.imdb_code] = result.insertId;
+
+
+            } else {
+
+              const [result, field] = await connection.execute(`INSERT INTO artists(full_name, image_url, imdb_code) VALUES("${artist.name}", "${imageURL}", "${artist.imdb_code}")`);
+
+              if (result.insertId !== 0) artistsObj[artist.imdb_code] = result.insertId;
+
+            }
 
           }
 
-          await connection.execute(`INSERT INTO movie_cast_mapping(movie_id, artist_id, character_name) VALUES(${rows.insertId}, ${artistsObj[artist.imdb_code]}, "${artist.name}")`);
+
+
+          await connection.execute(`INSERT INTO movie_cast_mapping(movie_id, artist_id, character_name) VALUES(${rows.insertId}, ${artistsObj[artist.imdb_code]}, "${artist.character_name}")`);
 
         }
 
