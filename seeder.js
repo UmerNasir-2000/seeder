@@ -20,7 +20,7 @@ async function bulkInsertMovies() {
     'horror': 3,
     'animation': 4,
     'drama': 5,
-    'mystrey': 6,
+    'mystery': 6,
     'crime': 7,
     'fantasy': 8,
     'adventure': 9,
@@ -28,9 +28,17 @@ async function bulkInsertMovies() {
     'sci-fi': 11,
     'thriller': 12,
     'romance': 13,
+    'family': 14,
+    'western': 15,
+    'history': 16,
+    'musical': 17,
+    'biography': 18,
+    'war': 19,
+    'documentary': 20,
+    'sport': 21,
   }
 
-  for (let i = 300; i <= 320; i++) {
+  for (let i = 1; i <= 1000; i++) {
     const { data } = await axios.get(
       `https://yts.mx/api/v2/movie_details.json?movie_id=${i}&with_cast=true&with_images=true`
     );
@@ -72,6 +80,12 @@ async function bulkInsertMovies() {
 
       for (const torrent of data.data.movie.torrents) {
         const moviesTorrent = await connection.execute(`INSERT INTO movie_torrents(movie_id, hash, quality, type, seeds, peers, size_bytes) VALUES(${rows.insertId},"${torrent.hash}","${torrent.quality}","${torrent.type}",${torrent.seeds}, ${torrent.peers}, ${torrent.size_bytes})`)
+      }
+
+      for (const genre of data.data.movie.genres) {
+        console.log(genre.toLowerCase())
+        console.log(genres[genre.toLowerCase()])
+        const movieGenres = await connection.execute(`INSERT INTO movie_genre_mapping(movie_id, genre_id) VALUES(${rows.insertId}, ${genres[genre.toLowerCase()]})`)
       }
 
       console.log(`Movie inserted with id = ${rows.insertId}`)

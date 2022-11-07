@@ -40,7 +40,7 @@ CREATE TABLE `movie_torrents`(
 
 CREATE TABLE `movie_genres`(
     `id` INT AUTO_INCREMENT,
-    `type` ENUM('action', 'comedy', 'horror', 'animation', 'drama', 'mystrey', 'crime', 'fantasy', 'adventure', 'superhero', 'sci-fi', 'thriller', 'romance') NOT NULL,
+    `type` ENUM('action', 'comedy', 'horror', 'animation', 'drama', 'mystrey', 'crime', 'fantasy', 'adventure', 'superhero', 'sci-fi', 'thriller', 'romance', 'family', 'western', 'history', 'musical', 'biography', 'war', 'documentary', 'sport') NOT NULL,
      primary key (`id`)
 );
 
@@ -57,7 +57,7 @@ INSERT INTO yts_db.movie_genres (`type`) VALUES
 	 ('horror'),
 	 ('animation'),
 	 ('drama'),
-	 ('mystrey'),
+	 ('mystery'),
 	 ('crime'),
 	 ('fantasy'),
 	 ('adventure'),
@@ -65,7 +65,15 @@ INSERT INTO yts_db.movie_genres (`type`) VALUES
 INSERT INTO yts_db.movie_genres (`type`) VALUES
 	 ('sci-fi'),
 	 ('thriller'),
-	 ('romance');
+	 ('romance'),
+     ('family'),
+     ('western'),
+     ('history'),
+     ('musical'),
+     ('biography'),
+     ('war'),
+     ('documentary'),
+     ('sport');
 
 
 CREATE TABLE `movie_cast_mapping`(
